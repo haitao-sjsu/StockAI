@@ -1,0 +1,65 @@
+[
+  {
+    "title": "Markets Keep Nudging Higher Ahead of Trade Deals, CPI",
+    "url": "https://www.zacks.com/stock/news/2493348/markets-keep-nudging-higher-ahead-of-trade-deals-cpi",
+    "time_published": "20250610T220200",
+    "authors": [
+      "Mark Vickery"
+    ],
+    "summary": "The S&P 500 is now at its highest level since February 20th.",
+    "banner_image": "https://staticx-tuner.zacks.com/images/articles/main/fb/311.jpg",
+    "source": "Zacks Commentary",
+    "category_within_source": "n/a",
+    "source_domain": "www.zacks.com",
+    "topics": [
+      {
+        "topic": "Economy - Monetary",
+        "relevance_score": "0.972193"
+      },
+      {
+        "topic": "Retail & Wholesale",
+        "relevance_score": "0.5"
+      },
+      {
+        "topic": "Financial Markets",
+        "relevance_score": "0.538269"
+      },
+      {
+        "topic": "Manufacturing",
+        "relevance_score": "0.5"
+      },
+      {
+        "topic": "Earnings",
+        "relevance_score": "0.310843"
+      }
+    ],
+    "overall_sentiment_score": 0.033563,
+    "overall_sentiment_label": "Neutral",
+    "ticker_sentiment": [
+      {
+        "ticker": "PETS",
+        "relevance_score": "0.15347",
+        "ticker_sentiment_score": "-0.106196",
+        "ticker_sentiment_label": "Neutral"
+      },
+      {
+        "ticker": "TSLA",
+        "relevance_score": "0.15347",
+        "ticker_sentiment_score": "0.055124",
+        "ticker_sentiment_label": "Neutral"
+      },
+      {
+        "ticker": "GME",
+        "relevance_score": "0.15347",
+        "ticker_sentiment_score": "0.142169",
+        "ticker_sentiment_label": "Neutral"
+      },
+      {
+        "ticker": "INTC",
+        "relevance_score": "0.15347",
+        "ticker_sentiment_score": "0.055124",
+        "ticker_sentiment_label": "Neutral"
+      }
+    ]
+  }
+]

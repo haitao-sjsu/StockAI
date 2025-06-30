@@ -1,0 +1,25 @@
+{
+  "Meta Data": {
+    "1. Information": "Daily Prices (open, high, low, close) and Volumes",
+    "2. Symbol": "TSLA",
+    "3. Last Refreshed": "2025-06-25",
+    "4. Output Size": "Full size",
+    "5. Time Zone": "US/Eastern"
+  },
+  "Time Series (Daily)": {
+    "2025-06-25": {
+      "1. open": "342.7100",
+      "2. high": "342.8600",
+      "3. low": "320.4000",
+      "4. close": "327.5500",
+      "5. volume": "119283781"
+    },
+    "2025-06-24": {
+      "1. open": "356.1700",
+      "2. high": "356.2600",
+      "3. low": "340.4400",
+      "4. close": "340.4700",
+      "5. volume": "114736245"
+    }
+  }
+}
