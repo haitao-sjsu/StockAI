@@ -21,6 +21,11 @@ class StreamlitRenderer(Renderer):
         """
         self.lang = lang
         self.texts = LANG_CONFIG.get(lang, LANG_CONFIG['en'])['ui']
+
+        st.set_page_config(
+            page_icon="📈",
+            initial_sidebar_state="expanded"  # 👈 这一行控制 sidebar 初始状态
+        )
     
     def sidebar_controls(self, lang: str) -> Tuple[str, int, float]:
         """
