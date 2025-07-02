@@ -46,7 +46,7 @@ LANG_CONFIG = {
         "time_label": "时间",
         "title_label": "标题",
         "summary_label": "摘要",
-        "system_instruction": "你是一位专业的金融分析师，擅长根据新闻事件分析股价异动原因。",
+        "system_instruction": "你是一位专业且谨慎的金融分析师，擅长根据新闻事件分析股价异动原因。你始终坚持基于事实进行分析，绝不编造或推测未在资料中明确提及的信息。当信息不足时，你会诚实地承认无法确定原因。",
         "user_prompt": """请分析以下关于股票 {symbol} 在 {date_str} 的新闻信息。
 
 **重要背景信息**: 股票 {symbol} 在 {date_str} 当天{direction_text}了 {price_change:.2f}%
@@ -59,7 +59,13 @@ LANG_CONFIG = {
 2. 这些事件如何解释当天的股价{direction_text}
 3. 影响程度的评估
 
-请用简洁明了的中文回答，重点解释为什么股票在当天{direction_text}了 {price_change:.2f}%。""",
+**重要提醒**：
+- 请只基于提供的新闻信息进行分析，不要添加未提及的信息
+- 如果提供的新闻信息不足以解释股价异动，请诚实说明"根据提供的新闻信息无法确定股价异动的具体原因"
+- 不要强行编造或推测未在新闻中明确提及的原因
+- 如果新闻内容与股价变动方向不符或关联性较弱，请如实指出
+
+请用简洁明了的中文回答，重点解释为什么股票在当天{direction_text}了 {price_change:.2f}%。如果无法确定原因，请直接说明。""",
         "error_prefix": "LLM 分析失败"
     },
     "en": {
@@ -108,7 +114,7 @@ LANG_CONFIG = {
         "time_label": "Time",
         "title_label": "Title", 
         "summary_label": "Summary",
-        "system_instruction": "You are a professional financial analyst who excels at analyzing stock price movements based on news events.",
+        "system_instruction": "You are a professional and cautious financial analyst who excels at analyzing stock price movements based on news events. You always adhere to fact-based analysis and never fabricate or speculate on information not explicitly mentioned in the materials. When information is insufficient, you honestly admit that the cause cannot be determined.",
         "user_prompt": """Please analyze the following news information about stock {symbol} on {date_str}.
 
 **Important Context**: Stock {symbol} {direction_text} {price_change:.2f}% on {date_str}
@@ -121,7 +127,13 @@ Based on the above news information and the actual stock price movement, please 
 2. How these events explain the day's stock price movement
 3. Assessment of the impact magnitude
 
-Please provide a concise and clear response in English, focusing on explaining why the stock {direction_text} {price_change:.2f}% on that day.""",
+**Important Guidelines**:
+- Only base your analysis on the provided news information, do not add information not mentioned
+- If the provided news information is insufficient to explain the stock price movement, please honestly state "The provided news information is insufficient to determine the specific cause of the stock price movement"
+- Do not fabricate or speculate on reasons not explicitly mentioned in the news
+- If the news content does not align with or has weak correlation to the stock price direction, please point this out honestly
+
+Please provide a concise and clear response in English, focusing on explaining why the stock {direction_text} {price_change:.2f}% on that day. If the cause cannot be determined, please state so directly.""",
         "error_prefix": "LLM analysis failed"
     }
 }

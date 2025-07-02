@@ -36,33 +36,45 @@ def run(
     if not render.render_price_chart(df_prices, signal_dates, lang):
         return  # No signals found, exit early
     
-    # 3. Find associate news and get llm results
+    # 3. Find associate news and get llm results with progress indication
+    # First render the analysis header
+    render.render_analysis_header(lang)
+    
+    # Show progress information
+    total_signals = len(signal_dates)
+    render.show_analysis_progress_info(total_signals, lang)
+    
     association = {}
     for signal_date in signal_dates:
         raw_news = news_fetcher.fetch(company_name, signal_date, signal_date)
         df_news = news_parser.parse(raw_news)
-        llm_analysis = analyze_news_with_openai(df_news, signal_date, symbol, df_prices.loc[signal_date]['pct_change'], lang)
+        pct_change = df_prices.loc[signal_date]['pct_change']
+        llm_analysis = analyze_news_with_openai(df_news, signal_date, pct_change, symbol, lang)
+        
+        # Render this analysis result
+        render.render_single_llm_analysis(signal_date, llm_analysis, pct_change, lang)
+        
         association[signal_date] = {
             'news': df_news,
             'llm_analysis': llm_analysis
         }
 
-    # 4. Render complete analysis results
-    render.render_llm_analysis(association, df_prices, lang)
+    # 4. Add separator after all analyses
+    render.add_separator()
 
 def main():
     # Create renderer instance first
     render = config.RENDERERS[config.DEFAULT_RENDERER]()
     
-    # Render language selector first (top right)
+    # Render language selector first (in sidebar)
     lang = render.render_language_selector()
     
+    # Sidebar controls (language selector is already rendered above)
+    symbol, period_days, threshold = render.sidebar_controls(lang)
+
     # Render the main title with selected language
     render.render_title(lang)
     
-    # Sidebar to get parameters (no longer includes language)
-    symbol, period_days, threshold = render.sidebar_controls(lang)
-
     news_fetcher = config.NEWS_FETCHERS[config.DEFAULT_NEWS_FETCHER](api_key=config.NEWSAPI_API_KEY)
     price_fetcher = config.PRICE_FETCHERS[config.DEFAULT_PRICE_FETCHER]()
     

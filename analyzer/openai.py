@@ -8,8 +8,8 @@ import streamlit as st
 def analyze_news_with_openai(
     df_news: pd.DataFrame,
     signal_date: pd.Timestamp,
-    symbol: str,
     price_change_pct: float,
+    symbol: str,
     lang: str = "zh"
 ) -> Optional[str]:
     """

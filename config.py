@@ -14,7 +14,7 @@ NEWSAPI_API_KEY=os.getenv('NEWSAPI_API_KEY')
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
 # --- OpenAI Configuration ---
-OPENAI_MODEL = 'gpt-3.5-turbo'
+OPENAI_MODEL = 'gpt-4.1'
 
 # --- Fetcher Registry ---
 from fetcher.alpha_vantage_news_fetcher import AlphaVantageNewsFetcher

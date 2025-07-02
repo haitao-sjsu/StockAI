@@ -12,17 +12,17 @@ class StreamlitRenderer(Renderer):
     Renders charts and news/summaries using Streamlit components.
     """
     
-    def __init__(self, lang: str = 'en'):
+    def __init__(self):
         """
         Initialize renderer with language setting.
         
         Args:
             lang: Language code ('en' or 'zh')
         """
-        self.lang = lang
-        self.texts = LANG_CONFIG.get(lang, LANG_CONFIG['en'])['ui']
+        self.texts = LANG_CONFIG.get(config_ui.DEFAULT_LANGUAGE, LANG_CONFIG['en'])['ui']
 
         st.set_page_config(
+            page_title=self.texts["title"],
             page_icon="📈",
             initial_sidebar_state="expanded"  # 👈 这一行控制 sidebar 初始状态
         )
@@ -30,8 +30,7 @@ class StreamlitRenderer(Renderer):
     def sidebar_controls(self, lang: str) -> Tuple[str, int, float]:
         """
         Render Streamlit sidebar controls and return user-selected parameters.
-        Note: Language selection is now handled separately in render_language_selector.
-
+        
         Args:
             lang: Language code for UI text
             
@@ -41,6 +40,9 @@ class StreamlitRenderer(Renderer):
             threshold (float): Price move threshold in percent
         """
         texts = LANG_CONFIG.get(lang, LANG_CONFIG['en'])['ui']
+        
+        # Add language selector at the top of sidebar
+        st.sidebar.markdown("---")
         
         st.sidebar.title(texts["sidebar_title"])
         
@@ -280,42 +282,105 @@ class StreamlitRenderer(Renderer):
     
     def render_language_selector(self) -> str:
         """
-        Render language selector in the top right corner using flag icons.
+        Render language selector in the sidebar.
         
         Returns:
             str: Selected language code
         """
-        # Create columns to position language selector in top right
-        col1, col2 = st.columns([5, 1])
+        # Initialize session state for language if not exists
+        if 'selected_language' not in st.session_state:
+            st.session_state.selected_language = config_ui.DEFAULT_LANGUAGE
         
-        with col2:
-            # Initialize session state for language if not exists
-            if 'selected_language' not in st.session_state:
-                st.session_state.selected_language = config_ui.DEFAULT_LANGUAGE
-            
-            # Language options with flag icons
-            language_options = config_ui.LANGUAGES
-            
-            # Create selectbox for language with custom styling
-            current_lang = st.session_state.selected_language
-            selected_display = st.selectbox(
-                label="🌐 Language",
-                options=list(language_options.keys()),
-                format_func=lambda x: language_options[x],
-                index=list(language_options.keys()).index(current_lang),
-                key="language_selector"
-            )
-            
-            # Check if language changed and reset if needed
-            if selected_display != st.session_state.selected_language:
-                st.session_state.selected_language = selected_display
-                # Clear other session state to reset the page (except language)
-                keys_to_keep = ['selected_language']
-                for key in list(st.session_state.keys()):
-                    if key not in keys_to_keep:
-                        del st.session_state[key]
-                st.rerun()
+        # Language options with flag icons
+        language_options = config_ui.LANGUAGES
+        
+        # Create selectbox for language in sidebar
+        current_lang = st.session_state.selected_language
+        selected_display = st.sidebar.selectbox(
+            label="🌐 Language",
+            options=list(language_options.keys()),
+            format_func=lambda x: language_options[x],
+            index=list(language_options.keys()).index(current_lang),
+            key="language_selector"
+        )
+        
+        # Check if language changed and reset if needed
+        if selected_display != st.session_state.selected_language:
+            st.session_state.selected_language = selected_display
+            # Clear other session state to reset the page (except language)
+            keys_to_keep = ['selected_language']
+            for key in list(st.session_state.keys()):
+                if key not in keys_to_keep:
+                    del st.session_state[key]
+            st.rerun()
         
         return st.session_state.selected_language
     
-    # ...existing code...
+    def render_single_llm_analysis(
+        self,
+        signal_date: pd.Timestamp,
+        llm_analysis: str,
+        pct_change: float,
+        lang: str
+    ) -> None:
+        """
+        Render a single LLM analysis result.
+        Note: Due to Streamlit's rendering mechanism, this will be displayed 
+        with other results when the script completes execution.
+        
+        Args:
+            signal_date: The date of the signal
+            llm_analysis: The LLM analysis text
+            pct_change: The percentage change for that date
+            lang: Language code for UI text
+        """
+        texts = LANG_CONFIG.get(lang, LANG_CONFIG['en'])['ui']
+        
+        if llm_analysis and llm_analysis.strip():
+            change_text = f"{pct_change:.2f}%"
+            if lang == 'zh':
+                expander_title = f"📅 {signal_date.date()} 变动{change_text}分析"
+            else:
+                expander_title = f"📅 {signal_date.date()} Analysis ({change_text} change)"
+                
+            with st.expander(expander_title, expanded=True):
+                st.markdown(llm_analysis)
+        else:
+            if lang == 'zh':
+                st.info(f"📅 {signal_date.date()}: {texts['no_analysis']}")
+            else:
+                st.info(f"📅 {signal_date.date()}: {texts['no_analysis']}")
+
+    def render_analysis_header(self, lang: str) -> None:
+        """
+        Render the analysis section header.
+        
+        Args:
+            lang: Language code for UI text
+        """
+        texts = LANG_CONFIG.get(lang, LANG_CONFIG['en'])['ui']
+        st.subheader(texts["ai_analysis_title"])
+
+    def add_separator(self) -> None:
+        """Add a visual separator."""
+        st.markdown("---")
+
+    def show_analysis_progress_info(self, total_signals: int, lang: str) -> None:
+        """
+        Show progress information before analysis starts.
+        
+        Args:
+            total_signals: Total number of signals to analyze
+            lang: Language code for UI text
+        """
+        texts = LANG_CONFIG.get(lang, LANG_CONFIG['en'])['ui']
+        
+        # Estimate processing time (assuming ~3 seconds per signal for LLM analysis)
+        estimated_time = total_signals * 3
+        
+        if lang == 'zh':
+            info_text = f"🔍 检测到 {total_signals} 个异动信号，正在进行AI分析，预计需要 {estimated_time} 秒..."
+        else:
+            info_text = f"🔍 Detected {total_signals} significant moves. Running AI analysis, estimated time: {estimated_time} seconds..."
+        
+        st.info(info_text)
