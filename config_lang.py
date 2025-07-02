@@ -3,7 +3,7 @@ LANG_CONFIG = {
     "zh": {
         # Frontend UI text
         "ui": {
-            "title": "📊 股票事件关联分析",
+            "title": "📊 股票事件关联分析（献给傻妞我老婆）",
             "sidebar_title": "控制面板",
             "stock_symbol": "股票代码",
             "stock_symbol_placeholder": "输入股票代码 (例如: TSLA, AAPL, MSFT)",
